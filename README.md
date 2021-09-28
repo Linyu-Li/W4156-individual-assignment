@@ -2,4 +2,7 @@
 individual project for Fall 2021
 
 
+Name: Linyu Li
+uni: ll3465
+
 https://www.youtube.com/watch?v=GCJpi3Fxwk4
