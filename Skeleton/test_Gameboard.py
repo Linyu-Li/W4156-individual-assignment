@@ -71,7 +71,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify(gb.current_turn, col, row)
+                verify = gb.verify(gb.current_turn, col)
                 self.assertEqual(verify, "valid")
 
     def test_not_current_players_turn(self):
@@ -88,14 +88,14 @@ class Test_TestGameboard(unittest.TestCase):
         gb.current_turn = "p1"
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify("p2", col, row)
+                verify = gb.verify("p2", col)
                 self.assertEqual(verify, "This is not your turn, please wait. p2")
 
         # Check if it is not p1's turn
         gb.current_turn = "p2"
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify("p1", col, row)
+                verify = gb.verify("p1", col)
                 self.assertEqual(verify, "This is not your turn, please wait. p1")
 
     def test_winner_already_declared(self):
@@ -111,7 +111,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify("p1", col, row)
+                verify = gb.verify("p1", col)
                 self.assertEqual(verify, "P1 is the winner")
 
         # Check if p2 is the winner
@@ -119,7 +119,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify("p2", col, row)
+                verify = gb.verify("p2", col)
                 self.assertEqual(verify, "P2 is the winner")
 
     def test_draw(self):
@@ -134,7 +134,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify(gb.current_turn, col, row)
+                verify = gb.verify(gb.current_turn, col)
                 self.assertEqual(verify, "draw")
 
     def test_current_column_is_filled(self):
@@ -150,7 +150,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify(gb.current_turn, col, row)
+                verify = gb.verify(gb.current_turn, col)
                 self.assertEqual(verify, "invalid, the col is filled")
 
     def test_p1_not_choose_color(self):
@@ -165,7 +165,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify(gb.player1, col, row)
+                verify = gb.verify(gb.player1, col)
                 self.assertEqual(verify, "p1 choose color first please!")
 
     def test_p2_not_choose_color(self):
@@ -181,7 +181,7 @@ class Test_TestGameboard(unittest.TestCase):
 
         for row in range(6, 0, -1):
             for col in range(7, 0, -1):
-                verify = gb.verify(gb.player2, col, row)
+                verify = gb.verify(gb.player2, col)
                 self.assertEqual(verify, "p2 choose color please")
 
     def test_winning_move_horizontal_for_p1(self):

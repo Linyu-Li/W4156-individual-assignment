@@ -20,7 +20,7 @@ class Gameboard:
         self.player2 = color
 
     # verifty the validation
-    def verify(self, curPlayer, col, row):
+    def verify(self, curPlayer, col):
         if self.game_result == "p1":
             return "P1 is the winner"
         if self.game_result == "p2":

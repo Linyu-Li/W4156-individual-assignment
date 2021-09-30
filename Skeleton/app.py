@@ -113,8 +113,8 @@ def p1_move():
         return jsonify(
             move=game.board, invalid=True, reason="This is not your turn.", winner=""
         )
-    if verify == "invalid":
-        return jsonify(move=game.board, invalid=True, reason="Invalid move", winner="")
+    if verify == "invalid, the col is filled":
+        return jsonify(move=game.board, invalid=True, reason="Invalid move, it's filled", winner="")
     if verify == "p1 choose color first please!":
         return jsonify(
             move=game.board, invalid=True, reason="p1 did not choose color", winner=""
