@@ -1,10 +1,8 @@
 import sqlite3
 from sqlite3 import Error
-from flask import request
-from flask.globals import g
+#from flask import request
 from Gameboard import Gameboard
 
-from Gameboard import Gameboard
 
 '''
 Initializes the Table GAME
@@ -12,6 +10,7 @@ Do not modify
 '''
 
 gameboard = None
+
 
 def init_db():
     # creates Table
@@ -37,8 +36,9 @@ Insert Tuple into table
 '''
 
 
-def add_move():  # will take in a tuple
+def add_move(move):  # will take in a tuple
     conn = None
+    '''
     global gameboard
     gameboard = Gameboard()
     ct = gameboard.current_turn
@@ -47,12 +47,10 @@ def add_move():  # will take in a tuple
     p1 = gameboard.player1
     p2 = gameboard.player2
     rm = gameboard.remaining_moves
+    '''
     try:
         conn = sqlite3.connect('sqlite_db')
-        conn.execute('INSERT INTO GAME VALUES ("' + 
-                    ct + '", "' + board + '", "' +
-                    winner + '", "' + p1 + '", "' +
-                    p2 + '",' + str(rm))
+        conn.execute('INSERT INTO GAME VALUES ' + str(move))
         print('add_move finished')
     except Error as e:
         print(e)
@@ -77,9 +75,16 @@ def getMove():
     remainin_moves = gameboard.remaining_moves
     try:
         conn = sqlite3.connect('sqlite_db')
-        res = conn.execute('SELECT * FROM GAME WHERE remaining_moves = ' + 
-                            str(remainin_moves) + '')
+        exect = conn.execute('SELECT * FROM GAME WHERE remaining_moves = ' + 
+                            str(remainin_moves))
+
+        res = None                    
+        for row in exect:
+            res = (row[0], row[1], row[2], row[3], row[4], row[5])
+        
+        print("getMove finished")
         return res
+        
     except Error as e:
         print(e)
         return None

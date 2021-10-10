@@ -1,9 +1,10 @@
 # import json
 from flask import Flask, render_template, request, jsonify
 # from flask import redirect
-# from json import dump
+from json import dump
 
 from Gameboard import Gameboard
+
 import db
 
 import logging
@@ -59,10 +60,12 @@ Assign player1 their color
 def player1_config():
     color = request.args.get("color", "")
     game.setColorForP1(color)
-    if (db.getMove() == None):
-        db.add_move()
+    '''
+    if (db.getMove() is None):
+        pass
     else:
         pass
+    '''
     return render_template("player1_connect.html", status=color)
 
 
@@ -134,6 +137,9 @@ def p1_move():
         game.winning_move(game.player1)
         game.ChangeTurn()
         game.DecreaseMoves()
+        
+        db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
+        db.add_move(db_move)
 
         return jsonify(move=game.board, invalid=False, winner=game.game_result)
 
@@ -173,7 +179,8 @@ def p2_move():
         game.winning_move(game.player2)
         game.ChangeTurn()
         game.DecreaseMoves()
-
+        db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
+        db.add_move(db_move)
         return jsonify(move=game.board, invalid=False, winner=game.game_result)
 
 
