@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 # from json import dump
 
 from Gameboard import Gameboard
-# import db
+import db
 
 import logging
 
@@ -27,6 +27,8 @@ Initial Webpage where gameboard is initialized
 
 @app.route("/", methods=["GET"])
 def player1_connect():
+    db.clear()
+    db.init_db()
     global game
     game = Gameboard()
     return render_template("player1_connect.html", status="Pick a Color.")
@@ -57,6 +59,10 @@ Assign player1 their color
 def player1_config():
     color = request.args.get("color", "")
     game.setColorForP1(color)
+    if (db.getMove() == None):
+        db.add_move()
+    else:
+        pass
     return render_template("player1_connect.html", status=color)
 
 
