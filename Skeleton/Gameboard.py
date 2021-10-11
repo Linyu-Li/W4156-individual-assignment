@@ -13,11 +13,33 @@ class Gameboard:
         self.current_turn = "p1"
         self.remaining_moves = 42
 
+    def __init__(self, player1="", player2="", board=[[0 for x in range(7)] for y in range(6)],
+                 game_result="", current_turn="p1", remaining_moves=42):
+        self.player1 = player1
+        self.player2 = player2
+        self.board = board
+        self.game_result = game_result
+        self.current_turn = current_turn
+        self.remaining_moves = remaining_moves
+
     def setColorForP1(self, color):
         self.player1 = color
 
     def setColorForP2(self, color):
         self.player2 = color
+
+    def setBoard(self, board):
+        self.board = board
+
+    def setGameResult(self, game_result):
+        self.game_result = game_result
+
+    def setCurrentTurn(self, current_turn):
+        self.current_turn = current_turn
+
+    def setReMoves(self, re_moves):
+        self.remaining_moves = re_moves
+
 
     # verifty the validation
     def verify(self, curPlayer, col):

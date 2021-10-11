@@ -1,7 +1,7 @@
 # import json
 from flask import Flask, render_template, request, jsonify
 # from flask import redirect
-from json import dump
+
 
 from Gameboard import Gameboard
 
@@ -16,7 +16,7 @@ app = Flask(__name__)
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
-game = None
+game = Gameboard()
 
 """
 Implement '/' endpoint
@@ -30,8 +30,14 @@ Initial Webpage where gameboard is initialized
 def player1_connect():
     db.clear()
     db.init_db()
-    global game
-    game = Gameboard()
+
+    game.setColorForP1("")
+    game.setColorForP2("")
+    game.setBoard([[0 for x in range(7)] for y in range(6)])
+    game.setCurrentTurn("p1")
+    game.setGameResult("")
+    game.setReMoves(42)
+
     return render_template("player1_connect.html", status="Pick a Color.")
 
 
@@ -58,14 +64,40 @@ Assign player1 their color
 
 @app.route("/p1Color", methods=["GET"])
 def player1_config():
-    color = request.args.get("color", "")
-    game.setColorForP1(color)
-    '''
-    if (db.getMove() is None):
-        pass
+    if db.getMove() is None:
+        color = request.args.get("color", "")
+        game.setColorForP1(color)
     else:
-        pass
-    '''
+        tup = db.getMove()
+        board = tup[1].split(".")
+        board = board[0: -1]
+        board_new = []
+        for row in board:
+            row = row.replace('[', '').replace(']', '').replace('\\', '').replace('\'', '')
+            row = row.split(', ')
+            row_new = []
+            for i in row:
+                if i == '0':
+                   i = int(i)
+                   row_new.append(i)
+                else:
+                    row_new.append(i)
+            board_new.append(row_new)
+
+        player1 = tup[3]
+        player2 = tup[4]
+        result = tup[2]
+        cu_turn = tup[0]
+        re_moves = tup[1]
+        game.setColorForP1(player1)
+        game.setColorForP2(player2)
+        game.setBoard(board_new)
+        game.setGameResult(result)
+        game.setCurrentTurn(cu_turn)
+        game.setReMoves(re_moves)
+
+        return render_template("player1_connect.html", status=game.player1)
+
     return render_template("player1_connect.html", status=color)
 
 
@@ -81,6 +113,7 @@ Assign player2 their color
 
 @app.route("/p2Join", methods=["GET"])
 def p2Join():
+    '''
     p1Color = game.player1
 
     if p1Color == "yellow":
@@ -93,6 +126,51 @@ def p2Join():
         return render_template(
             "p2Join.html", status="Error! P1 did not pick color first!"
         )
+        '''
+
+    if db.getMove() is None:
+        p1Color = game.player1
+
+        if p1Color == "yellow":
+            game.player2 = "red"
+            return render_template("p2Join.html", status=game.player2)
+        elif p1Color == "red":
+            game.player2 = "yellow"
+            return render_template("p2Join.html", status=game.player2)
+        else:
+            return render_template(
+                "p2Join.html", status="Error! P1 did not pick color first!"
+            )
+    else:
+        tup = db.getMove()
+        board = tup[1].split(".")
+        board = board[0: -1]
+        board_new = []
+        for row in board:
+            row = row.replace('[', '').replace(']', '').replace('\\', '').replace('\'', '')
+            row = row.split(', ')
+            row_new = []
+            for i in row:
+                if i == '0':
+                   i = int(i)
+                   row_new.append(i)
+                else:
+                    row_new.append(i)
+            board_new.append(row_new)
+
+        player1 = tup[3]
+        player2 = tup[4]
+        result = tup[2]
+        cu_turn = tup[0]
+        re_moves = tup[1]
+        game.setColorForP1(player1)
+        game.setColorForP2(player2)
+        game.setBoard(board_new)
+        game.setGameResult(result)
+        game.setCurrentTurn(cu_turn)
+        game.setReMoves(re_moves)
+
+        return render_template("p2Join.html", status=game.player2)
 
 
 """
@@ -137,9 +215,13 @@ def p1_move():
         game.winning_move(game.player1)
         game.ChangeTurn()
         game.DecreaseMoves()
-        
-        #db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
-        #db.add_move(db_move)
+
+        board = ''
+
+        for row in game.board:
+            board += str(row) + '.'
+        db_move = (game.current_turn, board, game.game_result, game.player1, game.player2, game.remaining_moves)
+        db.add_move(db_move)
 
         return jsonify(move=game.board, invalid=False, winner=game.game_result)
 
@@ -179,8 +261,13 @@ def p2_move():
         game.winning_move(game.player2)
         game.ChangeTurn()
         game.DecreaseMoves()
-       # db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
-        #db.add_move(db_move)
+
+        board = ''
+        for row in game.board:
+            board += str(row) + '.'
+        db_move = (game.current_turn, board, game.game_result, game.player1, game.player2, game.remaining_moves)
+        db.add_move(db_move)
+
         return jsonify(move=game.board, invalid=False, winner=game.game_result)
 
 
