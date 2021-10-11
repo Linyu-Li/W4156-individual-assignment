@@ -45,11 +45,8 @@ class Test_Testdb(unittest.TestCase):
 
     def test_getMove(self):
         res = db.getMove()
-        tup = None
-        for row in res:
-            tup = (row[0], row[1], row[2], row[3], row[4], row[5])
 
-        self.assertEqual(tup, ('p1', 'test_board', '', 'red', 'yellow', 42))
+        self.assertEqual(res, None)
 
     def test_clear(self):
         db.clear()
