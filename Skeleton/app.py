@@ -138,8 +138,8 @@ def p1_move():
         game.ChangeTurn()
         game.DecreaseMoves()
         
-        db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
-        db.add_move(db_move)
+        #db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
+        #db.add_move(db_move)
 
         return jsonify(move=game.board, invalid=False, winner=game.game_result)
 
@@ -179,8 +179,8 @@ def p2_move():
         game.winning_move(game.player2)
         game.ChangeTurn()
         game.DecreaseMoves()
-        db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
-        db.add_move(db_move)
+       # db_move = (game.current_turn, game.board, game.game_result, game.player1, game.player2, game.remaining_moves)
+        #db.add_move(db_move)
         return jsonify(move=game.board, invalid=False, winner=game.game_result)
 
 
