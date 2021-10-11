@@ -14,6 +14,22 @@ class Test_TestGameboard(unittest.TestCase):
         global gb
         gb = None
 
+    def test_setBoard(self):
+        gb.setBoard('')
+        self.assertEqual(gb.board, '')
+
+    def test_setGameResult(self):
+        gb.setGameResult('')
+        self.assertEqual(gb.game_result, '')
+
+    def test_setCurrentTurn(self):
+        gb.setCurrentTurn('p1')
+        self.assertEqual(gb.current_turn, 'p1')
+
+    def test_setReMoves(self):
+        gb.setReMoves(42)
+        self.assertEqual(gb.remaining_moves, 42)
+
     def test_setColorForP1(self):
         # Check set color function
         gb.setColorForP1("red")

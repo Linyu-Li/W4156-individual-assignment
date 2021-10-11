@@ -2,7 +2,6 @@ import sqlite3
 from sqlite3 import Error
 
 
-
 '''
 Initializes the Table GAME
 Do not modify
@@ -70,8 +69,7 @@ def getMove():
         cur.close()
         conn.commit()
         print("getMove finished")
-        return res
-        
+        return res    
     except Error as e:
         print(e)
         return None
